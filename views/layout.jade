@@ -4,4 +4,9 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    <script src="/socket.io/socket.io.js"></script>  
+    <script src="/javascripts/socket-handle.js"></script>
     block content
+    button(
+      onClick="send()"
+    ) Come!

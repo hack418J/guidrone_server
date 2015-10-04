@@ -73,29 +73,38 @@ function demoMove(d, cb) {
      {
        delay: 5000,
        task: function () {
-         d.turnRight({steps: 17});
-       }
-     },
-     {
-       delay: 3000,
-       task: function () {
-         d.forward();
-       }
-     },
-     {
-       delay: 10000,
-       task: function () {
-         d.land();
-       }
-     },
-     {
-       delay: 5000,
-       task: function () {
-         temporal.clear();
-         cb();
+         d.turnRight({steps: 17}, next);
        }
      }
    ]);
+  function next() {
+    temporal.queue([{
+        delay: 0,
+        task: function () {
+          d.flatTrim();
+        }
+      },
+      {
+         delay: 15000,
+         task: function () {
+           d.forward();
+         }
+       },
+       {
+         delay: 5000,
+         task: function () {
+           d.land();
+         }
+       },
+       {
+         delay: 5000,
+         task: function () {
+           temporal.clear();
+           cb();
+         }
+       }
+     ]);
+   }
 }
 
 module.exports = function (app) {
@@ -117,6 +126,7 @@ module.exports = function (app) {
   });
 
   io.on('connection', function (socket) {
+    console.log('connect');
 
     socket.on('come', function(position){
       console.log('come message from client');
@@ -127,11 +137,15 @@ module.exports = function (app) {
 
     socket.on('disconnect', function(){
       //d.disconnect();
-      console.log('err i lost drone');
+      console.log('err i lost socket');
     });
 
     d.on('battery', function(){
       socket.emit('battery', {});
+    });
+
+    d.on('disconnect', function(){
+      socket.emit('disconnect');
     });
 
     process.on('exit', function() {
