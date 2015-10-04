@@ -73,38 +73,30 @@ function demoMove(d, cb) {
      {
        delay: 5000,
        task: function () {
-         d.turnRight({steps: 17}, next);
+         d.turnRight({steps: 17});
+       }
+     },
+    {
+       delay: 10000,
+       task: function () {
+         d.forward();
+       }
+     },
+     {
+       delay: 15000,
+       task: function () {
+         d.land();
+       }
+     },
+     {
+       delay: 5000,
+       task: function () {
+         temporal.clear();
+         cb();
        }
      }
    ]);
-  function next() {
-    temporal.queue([{
-        delay: 0,
-        task: function () {
-          d.flatTrim();
-        }
-      },
-      {
-         delay: 15000,
-         task: function () {
-           d.forward();
-         }
-       },
-       {
-         delay: 5000,
-         task: function () {
-           d.land();
-         }
-       },
-       {
-         delay: 5000,
-         task: function () {
-           temporal.clear();
-           cb();
-         }
-       }
-     ]);
-   }
+
 }
 
 module.exports = function (app) {

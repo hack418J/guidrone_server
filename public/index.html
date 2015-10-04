@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+       <meta charset="utf-8">
+       <title>target</title>
+</head>
+<body>
+<button id="come">Come</button><br/>
+<span id="gone"></span>
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+ var socket = io.connect('http://192.168.126.20:3000');
+
+ $("#come").click(function(){
+    socket.emit('come',{});
+  });
+
+ socket.on('gone', function(){
+    $("#gone").text = 'aaa';
+ });
+</script>
+ </body>
+</html>
